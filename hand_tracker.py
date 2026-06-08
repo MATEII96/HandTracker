@@ -95,9 +95,65 @@ class EnergyTracker:
         script_dir = os.path.dirname(os.path.abspath(__file__))
         out_dir = os.path.join(script_dir, 'recordings')
         os.makedirs(out_dir, exist_ok=True)
+        ts = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        csv_path = os.path.join(out_dir, f'{ts}.csv')
+        png_path = os.path.join(out_dir, f'{ts}.png')
+
+        fields = ['t_sec', 'num_hands', 'speed_max_m_s', 'ke_total_j',
+                  'work_cumulative_j', 'x_m', 'y_m', 'z_m']
         
+        with open(csv_path, 'w', newline='', encoding='utf-8-sig') as f:
+            f.write('sep=;\n')
+            writer = csv.DictWriter(f, fieldnames=fields, delimiter=';')
+            writer.writeheader()
+            for sample in self.samples:
+                writer.writerow(s)
+
+        try:
+            import matplotlib
+            matplotlib.use('Agg')
+            import matplotlib.pyplot as plt
+        except ImportError:
+            print(f'[Salvat Csv] {csv_path}')
+            return csv_path, None
+
+        ts_ = [s['t_sec'] for s in self.samples]
+        ke = [s['ke_total_j'] for s in self.samples]
+        v = [s['speed_max_m_s'] for s in self.samples]
+        w_cum = [s['work_cumulative_j'] for s in self.samples]
+
+        fig, axes = plt.subplots(3, 1, figsize=(10, 8), sharex=True)
+        title = (f'Sesiune{ts} | durata {duration:.2f} s | '
+                 f'E_k varf: {self.peak_ke:.4f} J | lucru: {self.work_j:.4f} J')
+        fig.suptitle(title, fontsize=11)
         
+        axes[0].plot(ts_, v, color='tab:orange', linewidth=1.5)
+        axes[0].set_ylabel('Viteza (m/s)')
+        axes[0].grid(True, alpha=0.3)
+
+        axes[1].plot(ts_, ke, color='tab:green', linewidth=1.5)
+        axes[1].set_ylabel('Energie cinetica (J)')
+        axes[1].grid(True, alpha=0.3)
+
+        axes[2].plot(ts_, w_cum, color='tab:blue', linewidth=1.5)
+        axes[2].set_ylabel('Lucru mecanic cumulat (j)')
+        axes[2].set_xlabel('Timp (s)')
+        axes[2].grid(True, alpha=0.3)
+
+        plt.tight_layout()
+
         
+
+
+        
+
+
+
+
+        
+
+            
+
 
 
 
