@@ -514,7 +514,7 @@ def main():
         cv2.putText(frame, f"FPS: {fps:5.1f}", (w - 140, h - 12), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0, 255, 255), 2)
         cv2.putText(
             frame,
-            "Q=iesire S=schelet A=unghiuri R=record energie",
+            "Q=iesire S=schelet A=unghiuri R=record energie P=screenshot",
             (10, h - 12),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.45,
@@ -532,6 +532,9 @@ def main():
             show_angles = not show_angles
         if key == ord("r"):
             energy.toggle()
+        if key == ord("p"):
+            cv2.imwrite("screenshot.png", frame)
+            print("Screenshot salvat ca screenshot.png")
 
     hands.close()
     cap.release()
