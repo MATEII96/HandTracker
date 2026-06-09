@@ -334,7 +334,27 @@ class LiveChart:
         cv2.rectangle(frame, (x - 5, y - 25), (x + 280, y + 230), (0, 0, 0), -1)
         cv2.rectangle(frame, (x - 5, y - 25), (x + 280, y + 230), (200, 200, 200), 1)
 
-        cv2
+        cv2.putText(frame, f'Mana: {label}', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
+        cv2.putText(frame, f'Gest: {gesture}', (x, y + 28), cv2.FONT_HERSHEY_SIMPLEX, 0.65, (0, 255, 255), 2)
+        cv2.putText(frame, f'Degete ridicate: {sum(fingers)}', (x, y + 55),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+        cv2.putText(frame,f'Adancime(Z): {depth:+.2f}', (x, y + 75),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 200, 100), 1)
+
+        finger_names = ['Police', 'Aratator', 'Mijlociu', 'Inelar', 'Mic']
+        for i, (n, up, ang) in enumerate(zip(finger_names, fingers, angles)):
+            color = (0, 255, 0) if up else 'JOS'
+            state = 'SUS' if up else 'JOS'
+            cv2.putText(frame, f'{n:9s} {ang:5.1f}deg [{state}]',
+                        (x, y + 105 + i * 23), cv2.FONT_HERSHEY_SIMPLEX, 0,45, color, 1)
+
+    def main():
+        cap = cv2.VideoCapture(0)
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+        
+        if not
+
 
                     
 
