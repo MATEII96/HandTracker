@@ -193,6 +193,33 @@ class EnergyTracker:
             self.cur_speed = max_v
 
 
+class LiveChart:
+    def __init__(self, window_sec=5.0):
+        self.window_sec = window_sec
+        self.data = []
+
+    def push(self, t, value):
+        self.data.append((t, float(value)))
+        cutoff = t - self.window_sec
+        while self.data and self.data[0][0] < cutoff:
+            self.data.pop(0)        
+
+    def draw(self, frame, x, y, w_box, h_box, title, color, unit):
+        cv2.rectangle(frame, (x, y), (x + w_box, y + h_box), (0, 0, 0), -1)
+        cv2.rectangle(frame, (x, y), (x + w_box, y + h_box), (180, 180, 180), 1)
+
+        if not self.data:
+            cv2.putText(frame, f'{title} (fara date)', (x + 6, y + 18,
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.45, color, 1)
+            return
+        
+
+
+    
+
+
+
+
                 
 
 
