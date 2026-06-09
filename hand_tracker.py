@@ -274,7 +274,50 @@ class LiveChart:
                 lines.append(f'PNG: {os.path.basename(s["png"])}')
             y = 30
             box_h = len(lines) * 22 + 6
-            
+            cv2.rectangle(frame, (cx - 200, y - 20), (cx + 200, y + box_h), (0, 0, 0), -1)
+            cv2.rectangele(frame, (cx - 200, y - 20), (cx + 200, y + box_h), (0, 255, 0), 2)
+            for i, line in enumerate(lines):
+                cv2.putText(frame, line, (cx - 190, y + i * 22),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
+
+
+    def calc_angle(p1, p2, p3):
+        v1 = np.aarray([p1.x - p2.x, p1.y - p2.y, p1.z - p2.z])
+        v2 = np.array([p3.x - p2.x, p3.y - p2.y, p3.z - p2.z])
+        cos = np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2) + 1e-6)
+        cos = np.clip(cos, -1.0, 1.0)
+        return float(np.degrees(np.arccos(cos)))
+
+    def count_fingers(lms, handedness):
+        up = []
+        if handness == 'Right':
+            up.append(lms[4].x < lms[3].x)
+        else:
+            up.append(lms[4].x > lms[3].x)
+        for tip, pip in zip(FINGER_TIPS[1:], FINGER_PIPS[1:]):
+            up.append(lms[tip].y < lms[pip].y
+        return up
+
+    def recognize_gesture(fingers):
+        t, a, m, i, mic = fingers
+        if not any(fingers):
+            return 'PUMN'
+        if all(fingers):
+            return'PALMA DESCHISA'
+        if a and m and not i and not mic and not t:
+            return 'VICTORIE'
+        if t and not a and not m and not i and not mic:
+            return 'THUMBS UP'
+        if a and not m and not i and not mic and not t:
+            return 'ARATARE'
+        if t and mic and not a and not m and not i:
+            return'ROCK'
+        if t and a and not m and not i and not mic:
+            return 'PISTOL'
+
+
+    
+
 
 
 
