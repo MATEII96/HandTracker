@@ -237,7 +237,21 @@ class LiveChart:
         w = frame.shape[1]
         cx = w // 2
 
-        if tracker
+        if tracker.recording:
+            elapsed = time.time() - tracker.t0
+            blink = int(elapsed * 2) % 2 == 0
+            if blink:
+                cv2.circle(frame, (cx - 90, 30), 9, (0, 0, 255), -1)
+            cv2.putText(frame, 'REC', (cx - 75, 38)),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+            
+            lines = [
+                f'Timp: {elapsed:5.2f} s',
+                f'E_k acum: {tracker.last_total_ke:6.3f} J',
+                f'E_k varf: {tracker.peak_ke:6.3f} J',
+                f'Lucru L: {tracker.work_j:6.3f} J',
+                f'Viteza: {tracker.cur_speed:5.2f} m/s', 
+            ]
 
            
 
