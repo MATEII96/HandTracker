@@ -252,6 +252,31 @@ class LiveChart:
                 f'Lucru L: {tracker.work_j:6.3f} J',
                 f'Viteza: {tracker.cur_speed:5.2f} m/s', 
             ]
+            y = 60
+            cv2.rectangle(frame, (cx - 130, y - 20), (cx + 130, y + len(lines) * 22), (0, 0, 0), -1)
+            cv2.rectangle(frame, (cx - 130, y - 20), (cx + 130, y + len(lines) * 22), (0, 0, 255), 1)
+            for i, line in enumerate(lines):
+                cv2.putText(frame, line, (cx - 120, y + i * 22), 
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 1)
+
+        elif tracker.summary is not None:
+            s = tracker.summary
+            lines = [
+                'REZULTAT DE INREGISTRARE',
+                f'Durata: {s["duration"]:6.2f} s  ({s.get('frames', 0)} frame-uri)',
+                f'E_k de varf: {s["peak_ke_j"]:7.4f} J',
+                f'Lucru mecanic: {s["work_j"]:7.4f} J',
+                f'Putere medie: {s["avg_power_w"]:7.4f} W',
+            ]
+            if s.get('csv'):
+                lines.append(f'CSV: {os.path.basename(s["csv"])}')
+            if s.get('png'):
+                lines.append(f'PNG: {os.path.basename(s["png"])}')
+            y = 30
+            box_h = len(lines) * 22 + 6
+            
+
+
 
            
 
