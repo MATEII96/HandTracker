@@ -394,6 +394,71 @@ class LiveChart:
                             )
 
                         wrist = (int(lms[0].x * w), int(lms[0].y * h))
+                        draw_axes(frame, wrist)
+
+                        angles = []
+                        for name, j in FINGER_JOINTS.items():
+                            angles.append(calc_angle(lms[j[0]], lms[j[1]], lms[j[2]]))
+
+                        if show_angles:
+                            for tip, pip in zip(FINGER_TIPS, FINGER_PIPS):
+                                px, py = int(lms[tip].x * w), int(lms[tip].y * h)
+                               ang = calc_angle(lms[pip - 1], lms[pip], lms[tip])
+                               cv2.putText(frame, f'{ang:0f}', (px + 8, py),
+                                           cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+                        z = lms[8].z
+                        tip_x, tip_y = int(lms[8].x * w), int(lms[8].y * h)
+                        radius = int(np.clip(25 - z * 250, 6, 50))
+                        cv2.circle(frame, (tip_x, tip_y), radius, (255, 0, 255), 2)
+
+                        fingers = count_fingers(lms, label)
+                        gesture = recognize_gesture(fingers)
+                        draw_info_panel(frame, idx, label, fingers, gesture, angles, z)
+
+                time.time()
+                energy.update(hand_positions, now)
+                speed_chart.push(now, energy.cur_speed)
+                ke_chart.push(now, energy.last_total_ke)
+                draw_energy_overlay(frame, energy)
+
+                chart_h = 70
+                chart_y = h - chart_h - 28
+                chart_w = (w - 60) // 2
+                speed_chart.draw(frame, 20, chart_y, chart_w, chart_h, 'Viteza',(0, 255, 255), 'm/s')
+                ke_chart.draw(frame, w - 40 - chart_w, chart_y, chart_w, chart_h, 'Energie cinetica', (0, 255, 0), 'J')
+                
+                fps = 1.0 / (now - prev_time + 1e-6)
+                prev_time = now
+
+                cv2.putText(frame, f'FPS: {fps:5.1f}', (w - 140, h - 12),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0, 255, 255), 2)
+                cv2.putText(frame, 'Q=iesire S=schelet A=unghiuri R=record energie', (10, h - 12),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.45, (255, 255, 255), 1)
+                
+                cv2.imshow('Hand Tracker - Schelet + Unghiuri + Axe + Gesturi', frame)
+                key = cv2.waitKey(1) & 0xFF
+                if key == ord('q'):
+                    break
+                elif key == ord('s'):
+                    show_skeleton = not show_skeleton
+                elif key == ord('a'):
+                    show_angles = not show_angles
+                elif key == ord('r'):
+                    energy.toggle()
+            cap.release()
+            cv2.destroyAllWindows()
+
+if __name__ == '__main__':
+    main()
+
+
+
+
+
+
+
+
+
 
 
                 
