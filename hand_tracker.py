@@ -156,6 +156,45 @@ class EnergyTracker:
         dt = now - self.prev_t
         if dt <= 1e-4:
             return
+        
+        total_ke = 0.0
+        max_v = 0.0
+        for idx, pos in hand_positions.items():
+            if idx in self.prev_pos:
+                v = np.linalg.norm(pos - self.prev_pos[idx]) / dt
+                total_ke += 0.5 * HAND_MASS_KG * v * v
+                if v > max_v:
+                    max_v = v
+
+        if self.recording:
+            self.work_j += abs(total_ke - self.last_total_ke)
+            if total_ke > self.peak_ke:
+                self.peak_ke = total_ke
+            
+            if hand_positions:
+                first_pos = next(iter(hand_positions.values()))
+                x_m, y_m, z_m = float(first_pos[0]), float(first_pos[1]), float(first_pos[2])
+            else:
+                x_m, y_m, z_m = ''
+            self.samples.append({
+                't_sec': round(now - self.t0, 4),
+                'num_hands': len(hand_positions),
+                'speed_max_m_s': round(max_v, 5),
+                'ke_total_j': round(total_ke, 6,
+                'work_cumulative_j': round(self.work_j, 6,
+                'x_m': x_m if x_m == '' else round(x_m, 5),
+                'y_m': y_m if y_m == '' else round(y_m, 5),
+                'z_m': z_m if z_m == '' else round(z_m, 5),
+                })
+
+            self.last_total_ke = total_ke
+            self.prev_t = now
+            self.prev_pos = dict(hand_positions)
+            self.cur_speed = max_v
+
+
+                
+
 
 
 
