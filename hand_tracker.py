@@ -353,7 +353,14 @@ class LiveChart:
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
         
-        if not
+        if not cap.isOpened():
+            print('Nu pot deschide camera.')
+            return
+        
+        prev_time = time.time()
+        show_skeleton = True
+        show_angles = True
+        
 
 
                     
