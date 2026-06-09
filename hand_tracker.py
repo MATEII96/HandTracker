@@ -360,7 +360,45 @@ class LiveChart:
         prev_time = time.time()
         show_skeleton = True
         show_angles = True
-        
+        energy = EnergyTracker()
+        speed_chart = LiveChart(window_sec=5.0)
+        ke_chart = LiveChart(window_sec=5.0)
+
+        while True:
+            ok, frame = cap.read()
+            if not ok:
+                break
+            frame = cv2.flip(frame, 1)
+            h, w, _ = frame.shape
+
+            rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            results = hands.process(rgb)
+
+            hands_positions = {}
+
+            if results.multi_hand_landmarks:
+                for idx, (hand_lm, hand_info) in enumerate(
+                    zip(results.multi_hand_landmarks, results.multi_handedness)
+                    ):
+                        label = hand_info.classification[0].label
+                        lms = hand_lm.landmark
+                        pos = hand_position_meters(lms, w, h)
+                        if pos is not None:
+                            hand_position_meters[idx] = pos
+
+                        if show_skeleton:
+                            mp_draw.draw_landmarks(
+                                frame, hand_lm, mp_hands.HAND_CONNECTIONS,
+                                mp_styles.get_default_hand_landmarks_style(),
+                                mp_styles.get_default_hannd_connections_style(),
+                            )
+
+                        wrist = (int(lms[0].x * w), int(lms[0].y * h))
+
+
+                
+
+
 
 
                     
