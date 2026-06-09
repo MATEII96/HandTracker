@@ -314,6 +314,30 @@ class LiveChart:
             return'ROCK'
         if t and a and not m and not i and not mic:
             return 'PISTOL'
+        return f'{sum(fingers)} DEGETE'
+
+    def draw_axes(frame, origin, size=70):
+        ox, oy = origin
+        cv2.arrowedLine(frame, (ox, oy), (ox + size, oy), (0, 0, 255), 2, tipLenght=0.2)
+        cv2.arrowedLine(frame, (ox, oy), (ox, oy - size), (0, 0, 255), 2, tipLenght=0.2)
+        cv2.arrowedLine(frame, (ox, oy),
+                        (ox - int(size * 0.6), oy + int(size * 0.6)),
+                        (255, 100, 0), 2, tipLenght=0.2)
+        cv2.putText(frame, 'X', (ox + size + 4, oy + 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+        cv2.putText(frame, 'Y', (ox - 5, oy - size - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+        cv2.putText(frame, 'Z', (ox - int(size * 0.6) - 15, oy + int(size * 0.6) + 10),5, oy + int(size * 0.6) + 15),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 100, 0), 2)
+
+    def draw_info_panel(frame, hand_idx, label, fingers, gesture, angles, depth):
+        x = 10 if hand_idx == 0 else frame.shape[1] - 290
+        y = 30
+        cv2.rectangle(frame, (x - 5, y - 25), (x + 280, y + 230), (0, 0, 0), -1)
+        cv2.rectangle(frame, (x - 5, y - 25), (x + 280, y + 230), (200, 200, 200), 1)
+
+        cv2
+
+                    
+
 
 
     
