@@ -223,6 +223,23 @@ class LiveChart:
         base_y = y + h_box - 8
         cv2.line(frame, (x + 4, base_y), (x + w_box - 4, base_y), (60, 60, 60), 1)
         pts = []
+        for (t, v) in self.data:
+           px = int(x + 4 + (t - t_start) / self.window_sec * (w_box - 8))
+           py = int(base_y - (v / v_max) * (h_box - 28))
+           pts.append((px, py))
+        for i in range(len(pts) - 1):
+            cv2.line(frame, pts[i], pts[i + 1], color, 2, cv2.LINE_AA)
+
+        cv2.putText(frame, f'{title} acum {cur:.3f} max {v_max_raw:.3f} {unit}',
+                    (x + 6, y + 16), cv2.FONT_HERSHEY_SIMPLEX, 0.42, color, 1)
+    
+    def draw_energy_overlay(frame, tracker):
+        w = frame.shape[1]
+        cx = w // 2
+
+        if tracker
+
+           
 
 
 
