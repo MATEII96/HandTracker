@@ -140,7 +140,15 @@ class EnergyTracker:
         axes[2].set_xlabel('Timp (s)')
         axes[2].grid(True, alpha=0.3)
 
-        plt.tight_layout()
+        plt.tight_layout(re)
+
+
+
+
+
+
+        
+
 
         
 
