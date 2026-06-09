@@ -212,6 +212,20 @@ class LiveChart:
             cv2.putText(frame, f'{title} (fara date)', (x + 6, y + 18,
                         cv2.FONT_HERSHEY_SIMPLEX, 0.45, color, 1)
             return
+
+        values = [v for t, v in self.data]
+        cur = values[-1]
+        v_max = max(values)
+        v_max = v_max_raw * 1.15 if v_max_raw > 1e-6 else 1.0
+        t_end = self.data[-1][0]
+        t_start = t_end - self.window_sec
+
+        base_y = y + h_box - 8
+        cv2.line(frame, (x + 4, base_y), (x + w_box - 4, base_y), (60, 60, 60), 1)
+        pts = []
+
+
+
         
 
 
