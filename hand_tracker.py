@@ -140,14 +140,37 @@ class EnergyTracker:
         axes[2].set_xlabel('Timp (s)')
         axes[2].grid(True, alpha=0.3)
 
-        plt.tight_layout(re)
+        plt.tight_layout(rect=[0, 0, 1, 0.97])
+        plt.savefig(png_path, dpi=120)
+        plt.close(fig)
+
+        print(f'[Salvat Csv] {csv_path}')
+        print(f'[Salvat Png] {png_path}')
+        return csv_path, png_path
+    
+    def update(self, hand_positions, now):
+        if self.prev_t is None:
+            self.prev_t = now
+            self.prev_pos = dict(hands_positions)
+            return
+        dt = now - self.prev_t
+        if dt <= 1e-4:
+            return
+
+
+
+
+
+    
 
 
 
 
 
 
-        
+
+
+
 
 
         
