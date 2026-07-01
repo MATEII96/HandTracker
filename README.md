@@ -5,6 +5,8 @@ This is a programme useful for physics teachers to make students understand the 
 You can record kinetic energy and mechanical work made by your hand in a record time.
 To use this you need a webcam python 3-12 installed and windows.(or go to the releases menu and there you will find the .exe file)
 
+![Hand-Tracker Preview](screenshot.png)
+
 # Destination:
 
 This programme is made for Romanian teachers but if you want a tutorial check the ## How to use the programme part in README.md
